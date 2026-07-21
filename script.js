@@ -1,5 +1,6 @@
 /* ==========================================================================
    DUOLINGO LUG'AT — JAVASCRIPT APPLICATION LOGIC
+   (Firebase Firestore bilan sinxronlashtirilgan versiya)
    ========================================================================== */
 
 (function () {
@@ -9,7 +10,54 @@
     const STORAGE_KEY_LESSONS = 'lugat_darslar';
     const STORAGE_KEY_STATS = 'lugat_stats';
 
-    // Initial Seed Data (Used if localStorage is empty)
+    // ---------- FIREBASE SOZLAMALARI (XAVFSIZ YUKLASH) ----------
+    const firebaseConfig = {
+        apiKey: "AIzaSyDNU2sKkXOPfFQ0rsMF89EYOvl5nlZ-HYU",
+        authDomain: "dictionary-a456b.firebaseapp.com",
+        projectId: "dictionary-a456b",
+        storageBucket: "dictionary-a456b.firebasestorage.app",
+        messagingSenderId: "882645376031",
+        appId: "1:882645376031:web:75fadd5945a52c71c1092a"
+    };
+
+    let docRef = null;
+
+    function initFirebase() {
+        if (typeof firebase !== 'undefined' && firebase.apps) {
+            try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                const db = firebase.firestore();
+                docRef = db.collection('lugat_app').doc('main');
+
+                // Cloud-dan real-vaqtda keladigan o'zgarishlar
+                docRef.onSnapshot(snap => {
+                    if (snap.exists) {
+                        const data = snap.data();
+                        if (data.lessons) state.lessons = data.lessons;
+                        if (data.stats) state.stats = data.stats;
+
+                        // LocalStorage keshiga yozish
+                        localStorage.setItem(STORAGE_KEY_LESSONS, JSON.stringify(state.lessons));
+                        localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(state.stats));
+
+                        // Interfeysni yangilash
+                        refreshAllUI();
+                    } else {
+                        // Birinchi marta: Firebase bulutiga lokal ma'lumotlarni yuboramiz
+                        docRef.set({ lessons: state.lessons, stats: state.stats }).catch(console.error);
+                    }
+                }, err => {
+                    console.warn("Firestore snapshot xatosi (oflayn Rejim):", err);
+                });
+            } catch (e) {
+                console.warn("Firebase yuklanishida xatolik:", e);
+            }
+        }
+    }
+
+    // Initial Seed Data (birinchi marta ishga tushganda ishlatiladi)
     const DEFAULT_LESSONS = {
         "dars_1": {
             id: "dars_1",
@@ -63,7 +111,7 @@
         editingWordId: null,
         editingLessonId: null,
         confirmCallback: null,
-        
+
         // Flashcard tab state
         flashcard: {
             lessonId: null,
@@ -84,16 +132,17 @@
     };
 
     /* ==========================================================================
-       STORAGE CONTROLLER
+       STORAGE CONTROLLER (LocalStorage + Firebase Cloud Sync)
        ========================================================================== */
     const Storage = {
         init() {
+            // LocalStorage-dan zudlik bilan yuklash
             const rawLessons = localStorage.getItem(STORAGE_KEY_LESSONS);
             if (rawLessons) {
                 try {
                     state.lessons = JSON.parse(rawLessons);
                 } catch (e) {
-                    console.error("Failed to parse stored lessons:", e);
+                    console.error("Local lessons parsing error:", e);
                     state.lessons = DEFAULT_LESSONS;
                     this.saveLessons();
                 }
@@ -107,7 +156,7 @@
                 try {
                     state.stats = JSON.parse(rawStats);
                 } catch (e) {
-                    console.error("Failed to parse stored stats:", e);
+                    console.error("Local stats parsing error:", e);
                     state.stats = [];
                 }
             } else {
@@ -116,12 +165,28 @@
         },
 
         saveLessons() {
+            // 1. Zudlik bilan LocalStorage-ga saqlaymiz
             localStorage.setItem(STORAGE_KEY_LESSONS, JSON.stringify(state.lessons));
             UI.updateQuickHeaderStats();
+
+            // 2. Agar Firebase mavjud bo'lsa, bulutga yuboramiz
+            if (docRef) {
+                docRef.set({ lessons: state.lessons, stats: state.stats }).catch(err => {
+                    console.warn("Firestore sync error:", err);
+                });
+            }
         },
 
         saveStats() {
+            // 1. LocalStorage-ga saqlash
             localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(state.stats));
+
+            // 2. Firebase-ga yuborish
+            if (docRef) {
+                docRef.set({ lessons: state.lessons, stats: state.stats }).catch(err => {
+                    console.warn("Firestore stats sync error:", err);
+                });
+            }
         }
     };
 
@@ -148,14 +213,14 @@
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            
+
             let icon = 'ℹ️';
             if (type === 'success') icon = '✅';
             if (type === 'error') icon = '⚠️';
-            
+
             toast.innerHTML = `<span>${icon}</span> <span>${escapeHtml(message)}</span>`;
             container.appendChild(toast);
-            
+
             setTimeout(() => {
                 toast.style.opacity = '0';
                 toast.style.transform = 'translateX(50px)';
@@ -446,7 +511,7 @@
             if (!uz || !en) return;
 
             const lesson = state.lessons[state.activeLessonId];
-            
+
             // Check for duplicate word in active lesson
             const isDuplicate = lesson.sozlar.some(
                 w => w.uz.toLowerCase() === uz.toLowerCase() && w.en.toLowerCase() === en.toLowerCase()
@@ -1169,12 +1234,25 @@
         });
     }
 
+    function refreshAllUI() {
+        LessonsTab.render();
+        FlashcardsTab.populateDropdown();
+        TestTab.populateDropdown();
+        ImportTab.populateDropdown();
+        StatsTab.render();
+        UI.updateQuickHeaderStats();
+    }
+
     // Initialize App
     document.addEventListener('DOMContentLoaded', () => {
+        // 1. LocalStorage-dan ma'lumotlarni zudlik bilan o'qiymiz
         Storage.init();
+
+        // 2. Tab va Modal hodisalarini o'rnatamiz
         setupTabs();
         setupModals();
 
+        // 3. Har bir bo'limni darhol ishga tushiramiz (oflayn yoki onlayn farqsiz)
         LessonsTab.init();
         FlashcardsTab.init();
         TestTab.init();
@@ -1182,6 +1260,9 @@
         ImportTab.init();
 
         UI.updateQuickHeaderStats();
+
+        // 4. Firebase bulutli sinxronizatsiyani fonda ishga tushiramiz
+        initFirebase();
     });
 
 })();
