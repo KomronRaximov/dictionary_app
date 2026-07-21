@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="uz">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,14 @@
     <!-- Google Fonts for classic journal feel -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Georgia&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Georgia&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Firebase (compat SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
+
 <body>
     <div class="app-container">
         <!-- Header -->
@@ -65,7 +72,8 @@
                             </button>
                         </div>
                         <div class="search-box">
-                            <input type="text" id="lesson-search-input" placeholder="Darsni qidirish..." autocomplete="off">
+                            <input type="text" id="lesson-search-input" placeholder="Darsni qidirish..."
+                                autocomplete="off">
                         </div>
                         <ul id="lessons-list" class="lessons-list">
                             <!-- Populated dynamically -->
@@ -87,8 +95,10 @@
                                     <span id="active-lesson-count" class="badge">0 so'z</span>
                                 </div>
                                 <div class="lesson-actions">
-                                    <button id="btn-edit-lesson-name" class="btn btn-outline btn-sm" title="Dars nomini tahrirlash">✏️ Nomni o'zgartirish</button>
-                                    <button id="btn-delete-lesson" class="btn btn-danger-outline btn-sm" title="Darsni o'chirish">🗑️ Darsni o'chirish</button>
+                                    <button id="btn-edit-lesson-name" class="btn btn-outline btn-sm"
+                                        title="Dars nomini tahrirlash">✏️ Nomni o'zgartirish</button>
+                                    <button id="btn-delete-lesson" class="btn btn-danger-outline btn-sm"
+                                        title="Darsni o'chirish">🗑️ Darsni o'chirish</button>
                                 </div>
                             </div>
 
@@ -99,11 +109,13 @@
                                     <div class="form-row">
                                         <div class="input-group">
                                             <label for="input-word-uz">O'zbekcha so'z</label>
-                                            <input type="text" id="input-word-uz" placeholder="Masalan: olma" required autocomplete="off">
+                                            <input type="text" id="input-word-uz" placeholder="Masalan: olma" required
+                                                autocomplete="off">
                                         </div>
                                         <div class="input-group">
                                             <label for="input-word-en">Inglizcha tarjimasi</label>
-                                            <input type="text" id="input-word-en" placeholder="Masalan: apple" required autocomplete="off">
+                                            <input type="text" id="input-word-en" placeholder="Masalan: apple" required
+                                                autocomplete="off">
                                         </div>
                                         <div class="input-group form-submit">
                                             <button type="submit" class="btn btn-primary">+ Qo'shish</button>
@@ -115,7 +127,8 @@
                             <!-- Words Search & Filter -->
                             <div class="words-filter-bar">
                                 <h3>So'zlar ro'yxati</h3>
-                                <input type="text" id="word-search-input" placeholder="So'zlarni qidirish..." autocomplete="off">
+                                <input type="text" id="word-search-input" placeholder="So'zlarni qidirish..."
+                                    autocomplete="off">
                             </div>
 
                             <!-- Words List Table -->
@@ -182,7 +195,8 @@
                                 <div class="flashcard-face flashcard-back">
                                     <span class="card-lang-tag accent">Inglizcha</span>
                                     <h2 id="fc-back-text" class="fc-word">...</h2>
-                                    <button id="fc-btn-speak" class="btn-icon btn-speak" title="Talaffuz qilish">🔊 Listen</button>
+                                    <button id="fc-btn-speak" class="btn-icon btn-speak" title="Talaffuz qilish">🔊
+                                        Listen</button>
                                     <p class="fc-hint">Kartani bosib qaytaring 🔄</p>
                                 </div>
                             </div>
@@ -210,7 +224,8 @@
                         </div>
                         <button id="btn-start-test" class="btn btn-primary">🎮 Yangi Test Boshlash</button>
                         <div class="test-status-badge">
-                            <span>To'g'ri: <strong id="test-correct-counter">0</strong> / <strong id="test-total-counter">0</strong></span>
+                            <span>To'g'ri: <strong id="test-correct-counter">0</strong> / <strong
+                                    id="test-total-counter">0</strong></span>
                         </div>
                     </div>
 
@@ -276,7 +291,8 @@
                     <div class="card recent-tests-card">
                         <div class="card-header-flex">
                             <h3>So'nggi 5 ta Test Natijalari</h3>
-                            <button id="btn-clear-stats" class="btn btn-danger-outline btn-sm">🗑️ Tarixni Tozalash</button>
+                            <button id="btn-clear-stats" class="btn btn-danger-outline btn-sm">🗑️ Tarixni
+                                Tozalash</button>
                         </div>
                         <div class="words-table-wrapper">
                             <table class="words-table">
@@ -305,7 +321,8 @@
                 <div class="import-wrapper card">
                     <h2>📥 So'zlarni Ommaviy Import Qilish</h2>
                     <p class="import-desc">
-                        Quyidagi matn maydoniga <code>o'zbekcha - inglizcha</code> ko'rinishidagi so'zlarni joylashtiring. 
+                        Quyidagi matn maydoniga <code>o'zbekcha - inglizcha</code> ko'rinishidagi so'zlarni
+                        joylashtiring.
                         Har bir juftlik yangi qatorda bo'lishi kerak.
                     </p>
 
@@ -325,7 +342,8 @@
 
                     <div class="form-group margin-top">
                         <label for="import-textarea">Import qilinadigan matn:</label>
-                        <textarea id="import-textarea" rows="8" placeholder="Masalan:&#10;olma - apple&#10;nok - pear&#10;uzum - grape&#10;shaftoli - peach"></textarea>
+                        <textarea id="import-textarea" rows="8"
+                            placeholder="Masalan:&#10;olma - apple&#10;nok - pear&#10;uzum - grape&#10;shaftoli - peach"></textarea>
                     </div>
 
                     <div class="import-actions">
@@ -360,7 +378,8 @@
             <form id="form-lesson">
                 <div class="form-group">
                     <label for="input-lesson-name">Dars nomi:</label>
-                    <input type="text" id="input-lesson-name" placeholder="Masalan: Transport vositalari" required autocomplete="off">
+                    <input type="text" id="input-lesson-name" placeholder="Masalan: Transport vositalari" required
+                        autocomplete="off">
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-outline modal-cancel">Bekor qilish</button>
@@ -431,4 +450,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
