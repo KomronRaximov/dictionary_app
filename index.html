@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duolingo Lug'at — So'z Yodlash Ilovasi</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for classic journal feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Georgia&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-logo">🌿</div>
+                <div class="brand-text">
+                    <h1>Duolingo Lug'at</h1>
+                    <p class="tagline">Lug'at boyligingizni oshiring</p>
+                </div>
+            </div>
+            <div class="header-badge">
+                <span id="quick-total-words">0 so'z</span>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="main-nav">
+            <button class="nav-btn active" data-tab="tab-lessons">
+                <span class="icon">📚</span>
+                <span class="label">Darslar & So'zlar</span>
+            </button>
+            <button class="nav-btn" data-tab="tab-flashcards">
+                <span class="icon">🎴</span>
+                <span class="label">Flashcardlar</span>
+            </button>
+            <button class="nav-btn" data-tab="tab-test">
+                <span class="icon">🧩</span>
+                <span class="label">Test (Moslashtirish)</span>
+            </button>
+            <button class="nav-btn" data-tab="tab-stats">
+                <span class="icon">📊</span>
+                <span class="label">Statistika</span>
+            </button>
+            <button class="nav-btn" data-tab="tab-import">
+                <span class="icon">📥</span>
+                <span class="label">Import</span>
+            </button>
+        </nav>
+
+        <!-- Main Content Panes -->
+        <main class="content-area">
+
+            <!-- TAB 1: DARSLAR VA SO'ZLAR -->
+            <section id="tab-lessons" class="tab-pane active">
+                <div class="lessons-layout">
+                    <!-- Sidebar: Lessons List -->
+                    <aside class="lessons-sidebar">
+                        <div class="sidebar-header">
+                            <h2>Darslar</h2>
+                            <button id="btn-add-lesson" class="btn btn-primary btn-sm">
+                                <span>+ Yangi dars</span>
+                            </button>
+                        </div>
+                        <div class="search-box">
+                            <input type="text" id="lesson-search-input" placeholder="Darsni qidirish..." autocomplete="off">
+                        </div>
+                        <ul id="lessons-list" class="lessons-list">
+                            <!-- Populated dynamically -->
+                        </ul>
+                    </aside>
+
+                    <!-- Main View: Words List -->
+                    <div class="words-view">
+                        <div id="no-lesson-selected" class="empty-state">
+                            <div class="empty-icon">📖</div>
+                            <h3>Dars tanlanmagan</h3>
+                            <p>Chap tomondan darsni tanlang yoki yangi dars yarating.</p>
+                        </div>
+
+                        <div id="active-lesson-container" class="active-lesson-container hidden">
+                            <div class="lesson-banner">
+                                <div class="lesson-info">
+                                    <h2 id="active-lesson-title">Dars nomi</h2>
+                                    <span id="active-lesson-count" class="badge">0 so'z</span>
+                                </div>
+                                <div class="lesson-actions">
+                                    <button id="btn-edit-lesson-name" class="btn btn-outline btn-sm" title="Dars nomini tahrirlash">✏️ Nomni o'zgartirish</button>
+                                    <button id="btn-delete-lesson" class="btn btn-danger-outline btn-sm" title="Darsni o'chirish">🗑️ Darsni o'chirish</button>
+                                </div>
+                            </div>
+
+                            <!-- Add New Word Form -->
+                            <div class="card add-word-card">
+                                <h3>+ Yangi so'z qo'shish</h3>
+                                <form id="add-word-form" class="add-word-form">
+                                    <div class="form-row">
+                                        <div class="input-group">
+                                            <label for="input-word-uz">O'zbekcha so'z</label>
+                                            <input type="text" id="input-word-uz" placeholder="Masalan: olma" required autocomplete="off">
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="input-word-en">Inglizcha tarjimasi</label>
+                                            <input type="text" id="input-word-en" placeholder="Masalan: apple" required autocomplete="off">
+                                        </div>
+                                        <div class="input-group form-submit">
+                                            <button type="submit" class="btn btn-primary">+ Qo'shish</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Words Search & Filter -->
+                            <div class="words-filter-bar">
+                                <h3>So'zlar ro'yxati</h3>
+                                <input type="text" id="word-search-input" placeholder="So'zlarni qidirish..." autocomplete="off">
+                            </div>
+
+                            <!-- Words List Table -->
+                            <div class="words-table-wrapper">
+                                <table class="words-table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>O'zbekcha</th>
+                                            <th>Inglizcha</th>
+                                            <th>Talaffuz</th>
+                                            <th class="text-right">Amallar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="words-table-body">
+                                        <!-- Dynamic rows -->
+                                    </tbody>
+                                </table>
+                                <div id="words-empty-msg" class="empty-state-sm hidden">
+                                    <p>Bu darsda hali so'zlar yo'q. Yuqoridagi forma orqali qo'shing!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: FLASHCARDS -->
+            <section id="tab-flashcards" class="tab-pane">
+                <div class="flashcards-wrapper">
+                    <div class="flashcard-controls-top card">
+                        <div class="select-group">
+                            <label for="flashcard-lesson-select">Darsni tanlang:</label>
+                            <select id="flashcard-lesson-select" class="custom-select">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                        <button id="btn-flashcard-shuffle" class="btn btn-outline">🔀 Aralashtirish</button>
+                    </div>
+
+                    <div id="flashcard-empty" class="empty-state hidden">
+                        <div class="empty-icon">🎴</div>
+                        <h3>So'zlar topilmadi</h3>
+                        <p>Tanlangan darsda flashcard uchun so'zlar yetarli emas.</p>
+                    </div>
+
+                    <div id="flashcard-active-area" class="flashcard-active-area">
+                        <!-- Progress Bar -->
+                        <div class="flashcard-progress">
+                            <div class="progress-bar-bg">
+                                <div id="flashcard-progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
+                            </div>
+                            <span id="flashcard-counter-text" class="progress-text">0 / 0</span>
+                        </div>
+
+                        <!-- 3D Card Container -->
+                        <div class="card-scene">
+                            <div id="flashcard" class="flashcard">
+                                <div class="flashcard-face flashcard-front">
+                                    <span class="card-lang-tag">O'zbekcha</span>
+                                    <h2 id="fc-front-text" class="fc-word">...</h2>
+                                    <p class="fc-hint">Kartani bosib tarjimasini ko'ring 🔄</p>
+                                </div>
+                                <div class="flashcard-face flashcard-back">
+                                    <span class="card-lang-tag accent">Inglizcha</span>
+                                    <h2 id="fc-back-text" class="fc-word">...</h2>
+                                    <button id="fc-btn-speak" class="btn-icon btn-speak" title="Talaffuz qilish">🔊 Listen</button>
+                                    <p class="fc-hint">Kartani bosib qaytaring 🔄</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation buttons -->
+                        <div class="flashcard-nav">
+                            <button id="btn-fc-prev" class="btn btn-outline btn-lg">⬅️ Oldingi</button>
+                            <button id="btn-fc-flip" class="btn btn-primary btn-lg">🔄 O'girish</button>
+                            <button id="btn-fc-next" class="btn btn-outline btn-lg">Keyingi ➡️</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: TEST (MOSLASHTIRISH O'YINI) -->
+            <section id="tab-test" class="tab-pane">
+                <div class="test-wrapper">
+                    <div class="test-header-bar card">
+                        <div class="select-group">
+                            <label for="test-lesson-select">Test uchun dars:</label>
+                            <select id="test-lesson-select" class="custom-select">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                        <button id="btn-start-test" class="btn btn-primary">🎮 Yangi Test Boshlash</button>
+                        <div class="test-status-badge">
+                            <span>To'g'ri: <strong id="test-correct-counter">0</strong> / <strong id="test-total-counter">0</strong></span>
+                        </div>
+                    </div>
+
+                    <div id="test-empty-msg" class="empty-state hidden">
+                        <div class="empty-icon">🧩</div>
+                        <h3>Test o'tkazish uchun so'zlar kam</h3>
+                        <p>Darsda kamida 2 ta so'z bo'lishi kerak.</p>
+                    </div>
+
+                    <div id="test-board" class="test-board">
+                        <div class="test-column">
+                            <h3 class="column-title">O'zbekcha So'zlar</h3>
+                            <div id="test-col-uz" class="words-match-list">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                        <div class="test-column">
+                            <h3 class="column-title">Inglizcha Tarjimalar</h3>
+                            <div id="test-col-en" class="words-match-list">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: STATISTIKA -->
+            <section id="tab-stats" class="tab-pane">
+                <div class="stats-wrapper">
+                    <!-- Metrics grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">📚</div>
+                            <div class="stat-info">
+                                <h3 id="stat-total-lessons">0</h3>
+                                <p>Jami Darslar</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📖</div>
+                            <div class="stat-info">
+                                <h3 id="stat-total-words">0</h3>
+                                <p>Jami So'zlar</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🎯</div>
+                            <div class="stat-info">
+                                <h3 id="stat-total-tests">0</h3>
+                                <p>O'tkazilgan Testlar</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⭐</div>
+                            <div class="stat-info">
+                                <h3 id="stat-avg-score">0%</h3>
+                                <p>O'rtacha Aniqlik</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent tests table -->
+                    <div class="card recent-tests-card">
+                        <div class="card-header-flex">
+                            <h3>So'nggi 5 ta Test Natijalari</h3>
+                            <button id="btn-clear-stats" class="btn btn-danger-outline btn-sm">🗑️ Tarixni Tozalash</button>
+                        </div>
+                        <div class="words-table-wrapper">
+                            <table class="words-table">
+                                <thead>
+                                    <tr>
+                                        <th>Sana</th>
+                                        <th>Dars Nomi</th>
+                                        <th>Natija</th>
+                                        <th>Foiz</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-tests-body">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                            <div id="stats-empty-msg" class="empty-state-sm hidden">
+                                <p>Hali hech qanday test topshirilmadi.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: IMPORT -->
+            <section id="tab-import" class="tab-pane">
+                <div class="import-wrapper card">
+                    <h2>📥 So'zlarni Ommaviy Import Qilish</h2>
+                    <p class="import-desc">
+                        Quyidagi matn maydoniga <code>o'zbekcha - inglizcha</code> ko'rinishidagi so'zlarni joylashtiring. 
+                        Har bir juftlik yangi qatorda bo'lishi kerak.
+                    </p>
+
+                    <div class="import-format-guide">
+                        <strong>Qo'llab-quvvatlanadigan formatlar:</strong>
+                        <span><code>olma - apple</code></span>
+                        <span><code>kitob : book</code></span>
+                        <span><code>salom , hello</code></span>
+                    </div>
+
+                    <div class="form-group margin-top">
+                        <label for="import-lesson-select">So'zlar qaysi darsga qo'shilsin?</label>
+                        <select id="import-lesson-select" class="custom-select">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+
+                    <div class="form-group margin-top">
+                        <label for="import-textarea">Import qilinadigan matn:</label>
+                        <textarea id="import-textarea" rows="8" placeholder="Masalan:&#10;olma - apple&#10;nok - pear&#10;uzum - grape&#10;shaftoli - peach"></textarea>
+                    </div>
+
+                    <div class="import-actions">
+                        <button id="btn-execute-import" class="btn btn-primary">📥 Import Qilish</button>
+                        <button id="btn-clear-import" class="btn btn-outline">🧹 Matnni Tozalash</button>
+                    </div>
+
+                    <div id="import-report" class="import-report hidden">
+                        <h4 id="import-report-title">Import natijasi</h4>
+                        <p id="import-report-details"></p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Duolingo Lug'at — Journal Style Uzbek Word Learning App &copy; 2026</p>
+        </footer>
+    </div>
+
+    <!-- MODALS -->
+
+    <!-- Add / Edit Lesson Modal -->
+    <div id="modal-lesson" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-lesson-title">Yangi Dars Yaratish</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="form-lesson">
+                <div class="form-group">
+                    <label for="input-lesson-name">Dars nomi:</label>
+                    <input type="text" id="input-lesson-name" placeholder="Masalan: Transport vositalari" required autocomplete="off">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline modal-cancel">Bekor qilish</button>
+                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Word Modal -->
+    <div id="modal-edit-word" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>So'zni Tahrirlash</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="form-edit-word">
+                <div class="form-group">
+                    <label for="edit-word-uz">O'zbekcha:</label>
+                    <input type="text" id="edit-word-uz" required autocomplete="off">
+                </div>
+                <div class="form-group margin-top">
+                    <label for="edit-word-en">Inglizcha:</label>
+                    <input type="text" id="edit-word-en" required autocomplete="off">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline modal-cancel">Bekor qilish</button>
+                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="modal-confirm" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-confirm-title">Tasdiqlang</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <p id="modal-confirm-msg">Ushbu amalni bajarishga ishonchingiz komilmi?</p>
+            <div class="modal-actions">
+                <button type="button" id="btn-confirm-cancel" class="btn btn-outline">Yo'q, bekor qilish</button>
+                <button type="button" id="btn-confirm-yes" class="btn btn-danger">Ha, bajarilsin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Result Modal -->
+    <div id="modal-test-result" class="modal-overlay hidden">
+        <div class="modal-card text-center">
+            <div class="result-badge-icon" id="test-result-icon">🎉</div>
+            <h2 id="test-result-title">Ajoyib natija!</h2>
+            <p id="test-result-desc" class="result-desc">Test muvaffaqiyatli yakunlandi.</p>
+            <div class="result-score-box">
+                <span id="test-result-score">8 / 8</span>
+                <small id="test-result-percent">100% to'g'ri</small>
+            </div>
+            <div class="modal-actions center">
+                <button id="btn-test-restart" class="btn btn-primary">🔄 Qayta O'ynash</button>
+                <button id="btn-test-close" class="btn btn-outline">Yopish</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
