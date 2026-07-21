@@ -8,37 +8,37 @@
     --bg-paper: #fcf9f2;
     --bg-card: #fffdf8;
     --bg-card-hover: #f5f0e3;
-    
+
     --color-primary: #2e6f40;
     --color-primary-dark: #20502e;
     --color-primary-light: #e8f3ec;
-    
+
     --color-accent: #c85a32;
     --color-accent-dark: #9e4020;
     --color-accent-light: #fbece6;
-    
+
     --color-text-main: #2b2825;
     --color-text-muted: #6e675f;
     --color-border: #3d352e;
     --color-border-light: #d8cfc4;
-    
+
     --color-success: #2e6f40;
     --color-error: #c83232;
     --color-warning: #d99a26;
-    
+
     /* Typography */
     --font-serif: 'Georgia', 'Merriweather', 'Times New Roman', serif;
     --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    
+
     /* Shadows & Borders */
     --border-radius-sm: 6px;
     --border-radius-md: 10px;
     --border-radius-lg: 16px;
     --border-radius-xl: 24px;
-    
+
     --border-style: 2px solid var(--color-border);
     --border-style-thin: 1px solid var(--color-border-light);
-    
+
     --shadow-paper: 3px 4px 0px rgba(61, 53, 46, 0.15);
     --shadow-paper-hover: 4px 6px 0px rgba(61, 53, 46, 0.25);
     --shadow-modal: 6px 8px 0px rgba(0, 0, 0, 0.3);
@@ -60,7 +60,7 @@ body {
     font-family: var(--font-serif);
     font-size: 16px;
     line-height: 1.6;
-    background-image: 
+    background-image:
         radial-gradient(var(--color-border-light) 0.75px, transparent 0.75px),
         radial-gradient(var(--color-border-light) 0.75px, var(--bg-app) 0.75px);
     background-size: 30px 30px;
@@ -189,8 +189,15 @@ body {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Common UI Elements */
@@ -804,9 +811,21 @@ textarea:focus {
 }
 
 @keyframes wrongShake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-6px); }
-    40%, 80% { transform: translateX(6px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-6px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(6px);
+    }
 }
 
 /* TAB 4: STATS */
@@ -935,8 +954,13 @@ textarea:focus {
 }
 
 @keyframes modalFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .modal-card {
@@ -1057,8 +1081,15 @@ textarea:focus {
 }
 
 @keyframes toastSlideIn {
-    from { opacity: 0; transform: translateX(50px); }
-    to { opacity: 1; transform: translateX(0); }
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 /* Utility Classes */
@@ -1079,44 +1110,433 @@ textarea:focus {
     border-top: var(--border-style-thin);
 }
 
-/* RESPONSIVE DESIGN */
-@media (max-width: 768px) {
-    .app-container {
-        margin: 10px auto;
-        padding: 0 10px;
-    }
+/* =====================================================================
+   FULL RESPONSIVE DESIGN — MOBILE FIRST
+   ===================================================================== */
 
-    .app-header {
-        padding: 12px 16px;
-    }
-
-    .brand-text h1 {
-        font-size: 1.3rem;
-    }
-
-    .brand-logo {
-        width: 42px;
-        height: 42px;
-        font-size: 1.8rem;
-    }
-
+/* --- Tablet (≤ 900px) --- */
+@media (max-width: 900px) {
     .lessons-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .add-word-form .form-row {
-        grid-template-columns: 1fr;
+        grid-template-columns: 240px 1fr;
+        gap: 14px;
     }
 
     .test-board {
+        gap: 14px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* --- Mobile (≤ 768px) --- */
+@media (max-width: 768px) {
+    /* Base */
+    body {
+        background-size: 20px 20px;
+        background-position: 0 0, 10px 10px;
+    }
+
+    .app-container {
+        margin: 6px auto;
+        padding: 0 8px;
+        padding-bottom: 80px; /* space for bottom nav */
+    }
+
+    /* Header */
+    .app-header {
+        padding: 10px 12px;
+        border-radius: var(--border-radius-md);
+        margin-bottom: 10px;
+    }
+
+    .brand-logo {
+        width: 38px;
+        height: 38px;
+        font-size: 1.5rem;
+    }
+
+    .brand-text h1 {
+        font-size: 1.15rem;
+    }
+
+    .brand-text .tagline {
+        display: none;
+    }
+
+    .header-badge span {
+        padding: 4px 10px;
+        font-size: 0.8rem;
+    }
+
+    /* Navigation — Bottom Bar on Mobile */
+    .main-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 500;
+        background: var(--bg-card);
+        border-top: var(--border-style);
+        display: flex;
+        justify-content: space-around;
+        align-items: stretch;
+        gap: 0;
+        padding: 0;
+        margin-bottom: 0;
+        box-shadow: 0 -3px 12px rgba(0,0,0,0.12);
+        overflow: hidden;
+    }
+
+    .nav-btn {
+        flex: 1;
+        flex-direction: column;
+        gap: 3px;
+        padding: 8px 4px;
+        font-size: 0.65rem;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        border-right: 1px solid var(--color-border-light);
+        white-space: normal;
+        text-align: center;
+        background: var(--bg-card);
+    }
+
+    .nav-btn:last-child {
+        border-right: none;
+    }
+
+    .nav-btn .icon {
+        font-size: 1.3rem;
+        line-height: 1;
+    }
+
+    .nav-btn .label {
+        font-size: 0.6rem;
+        line-height: 1.2;
+    }
+
+    .nav-btn.active {
+        background: var(--color-primary-light);
+        color: var(--color-primary-dark);
+        border-top: 3px solid var(--color-primary);
+    }
+
+    .nav-btn:hover:not(.active) {
+        transform: none;
+        background: var(--bg-card-hover);
+    }
+
+    /* --- TAB 1: LESSONS & WORDS --- */
+    .lessons-layout {
         grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .lessons-sidebar {
+        padding: 12px;
+    }
+
+    .lessons-list {
+        max-height: 220px;
+    }
+
+    .lesson-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 14px;
+    }
+
+    .lesson-info h2 {
+        font-size: 1.15rem;
+    }
+
+    .lesson-actions {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .lesson-actions .btn-sm {
+        font-size: 0.78rem;
+        padding: 5px 10px;
+    }
+
+    /* Add word form — vertical stack */
+    .add-word-form .form-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .form-submit {
+        display: flex;
+    }
+
+    .form-submit .btn {
+        width: 100%;
+    }
+
+    /* Words filter bar */
+    .words-filter-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .words-filter-bar input {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    /* Words table — horizontal scroll + compact */
+    .words-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .words-table {
+        min-width: 480px;
+    }
+
+    .words-table th,
+    .words-table td {
+        padding: 8px 10px;
+        font-size: 0.87rem;
+    }
+
+    /* Card */
+    .card {
+        padding: 14px;
+    }
+
+    /* --- TAB 2: FLASHCARDS --- */
+    .flashcards-wrapper {
+        max-width: 100%;
+    }
+
+    .flashcard-controls-top {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .flashcard-controls-top .select-group {
+        width: 100%;
+    }
+
+    .flashcard-controls-top .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .card-scene {
+        margin-bottom: 16px;
     }
 
     .flashcard {
-        height: 280px;
+        height: 260px;
+    }
+
+    .flashcard-face {
+        padding: 20px 16px;
     }
 
     .fc-word {
+        font-size: 1.6rem;
+    }
+
+    .fc-hint {
+        font-size: 0.78rem;
+    }
+
+    .flashcard-nav {
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .flashcard-nav .btn-lg {
+        flex: 1;
+        padding: 10px 8px;
+        font-size: 0.85rem;
+    }
+
+    /* --- TAB 3: TEST --- */
+    .test-wrapper {
+        max-width: 100%;
+    }
+
+    .test-header-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .test-header-bar .select-group {
+        width: 100%;
+    }
+
+    .test-header-bar .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .test-board {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    .column-title {
+        font-size: 0.8rem;
+    }
+
+    .match-tile {
+        padding: 10px 8px;
+        font-size: 0.85rem;
+        border-radius: var(--border-radius-sm);
+    }
+
+    /* --- TAB 4: STATISTIKA --- */
+    .stats-wrapper {
+        max-width: 100%;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .stat-card {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .stat-icon {
         font-size: 1.7rem;
+    }
+
+    .stat-info h3 {
+        font-size: 1.2rem;
+    }
+
+    .stat-info p {
+        font-size: 0.78rem;
+    }
+
+    .card-header-flex {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .recent-tests-card {
+        overflow-x: auto;
+    }
+
+    .recent-tests-card .words-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .recent-tests-card .words-table {
+        min-width: 420px;
+    }
+
+    /* --- TAB 5: IMPORT --- */
+    .import-wrapper {
+        max-width: 100%;
+        padding: 14px;
+    }
+
+    .import-wrapper h2 {
+        font-size: 1.15rem;
+    }
+
+    .import-format-guide {
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.8rem;
+    }
+
+    .import-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .import-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* --- MODALS --- */
+    .modal-card {
+        padding: 18px 16px;
+        max-width: calc(100vw - 24px);
+    }
+
+    .modal-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .modal-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .modal-actions.center {
+        flex-direction: row;
+    }
+
+    /* --- TOAST --- */
+    .toast-container {
+        bottom: 90px; /* above bottom nav */
+        right: 10px;
+        left: 10px;
+    }
+
+    .toast {
+        max-width: 100%;
+    }
+}
+
+/* --- Small Mobile (≤ 420px) --- */
+@media (max-width: 420px) {
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .test-board {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .match-tile {
+        font-size: 0.78rem;
+        padding: 8px 5px;
+    }
+
+    .flashcard {
+        height: 240px;
+    }
+
+    .fc-word {
+        font-size: 1.35rem;
+    }
+
+    .brand-text h1 {
+        font-size: 1rem;
+    }
+
+    .nav-btn .icon {
+        font-size: 1.15rem;
+    }
+
+    .nav-btn .label {
+        font-size: 0.55rem;
     }
 }
