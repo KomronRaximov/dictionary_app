@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duolingo Lug'at — So'z Yodlash Ilovasi</title>
-    <link rel="stylesheet" href="style.css">
+    <title>DictionaryApp — So'z Yodlash Ilovasi</title>
+    <link rel="stylesheet" href="style.css?v=3">
     <!-- Google Fonts for classic journal feel -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
             <div class="brand">
                 <div class="brand-logo">🌿</div>
                 <div class="brand-text">
-                    <h1>Duolingo Lug'at</h1>
+                    <h1>DictionaryApp</h1>
                     <p class="tagline">Lug'at boyligingizni oshiring</p>
                 </div>
             </div>
@@ -108,13 +108,13 @@
                                 <form id="add-word-form" class="add-word-form">
                                     <div class="form-row">
                                         <div class="input-group">
-                                            <label for="input-word-uz">O'zbekcha so'z</label>
-                                            <input type="text" id="input-word-uz" placeholder="Masalan: olma" required
+                                            <label for="input-word-en">Inglizcha so'z</label>
+                                            <input type="text" id="input-word-en" placeholder="Masalan: apple" required
                                                 autocomplete="off">
                                         </div>
                                         <div class="input-group">
-                                            <label for="input-word-en">Inglizcha tarjimasi</label>
-                                            <input type="text" id="input-word-en" placeholder="Masalan: apple" required
+                                            <label for="input-word-uz">O'zbekcha tarjimasi</label>
+                                            <input type="text" id="input-word-uz" placeholder="Masalan: olma" required
                                                 autocomplete="off">
                                         </div>
                                         <div class="input-group form-submit">
@@ -220,6 +220,16 @@
                             <label for="test-lesson-select">Test uchun dars:</label>
                             <select id="test-lesson-select" class="custom-select">
                                 <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="select-group">
+                            <label for="test-count-select">Savollar soni:</label>
+                            <select id="test-count-select" class="custom-select">
+                                <option value="5">5 ta</option>
+                                <option value="10" selected>10 ta</option>
+                                <option value="15">15 ta</option>
+                                <option value="20">20 ta</option>
+                                <option value="all">Barchasi</option>
                             </select>
                         </div>
                         <button id="btn-start-test" class="btn btn-primary">🎮 Yangi Test Boshlash</button>
@@ -362,7 +372,7 @@
 
         <!-- Footer -->
         <footer class="app-footer">
-            <p>Duolingo Lug'at — Journal Style Uzbek Word Learning App &copy; 2026</p>
+            <p>DictionaryApp — Uzbek Word Learning App &copy; 2026</p>
         </footer>
     </div>
 
@@ -398,12 +408,12 @@
             </div>
             <form id="form-edit-word">
                 <div class="form-group">
-                    <label for="edit-word-uz">O'zbekcha:</label>
-                    <input type="text" id="edit-word-uz" required autocomplete="off">
-                </div>
-                <div class="form-group margin-top">
                     <label for="edit-word-en">Inglizcha:</label>
                     <input type="text" id="edit-word-en" required autocomplete="off">
+                </div>
+                <div class="form-group margin-top">
+                    <label for="edit-word-uz">O'zbekcha:</label>
+                    <input type="text" id="edit-word-uz" required autocomplete="off">
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-outline modal-cancel">Bekor qilish</button>
@@ -448,7 +458,7 @@
     <!-- Toast Notification Container -->
     <div id="toast-container" class="toast-container"></div>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=3"></script>
 </body>
 
 </html>
