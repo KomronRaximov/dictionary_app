@@ -1,5 +1,5 @@
 /* ==========================================================================
-   DUOLINGO LUG'AT — JAVASCRIPT APPLICATION LOGIC
+    DictionaryApp — JAVASCRIPT APPLICATION LOGIC
    (Firebase Firestore bilan sinxronlashtirilgan versiya)
    ========================================================================== */
 
@@ -35,8 +35,16 @@
                 docRef.onSnapshot(snap => {
                     if (snap.exists) {
                         const data = snap.data();
-                        if (data.lessons) state.lessons = data.lessons;
-                        if (data.stats) state.stats = data.stats;
+                        if (data && data.lessons && Object.keys(data.lessons).length > 0) {
+                            state.lessons = data.lessons;
+                        } else if (Object.keys(state.lessons).length > 0) {
+                            // Bulutda so'zlar bo'lsa, lokal ma'lumotni bulutga yuklaymiz
+                            docRef.set({ lessons: state.lessons, stats: state.stats }).catch(console.error);
+                        }
+
+                        if (data && data.stats) {
+                            state.stats = data.stats;
+                        }
 
                         // LocalStorage keshiga yozish
                         localStorage.setItem(STORAGE_KEY_LESSONS, JSON.stringify(state.lessons));
@@ -334,6 +342,10 @@
         },
 
         render() {
+            const keys = Object.keys(state.lessons);
+            if (keys.length > 0 && (!state.activeLessonId || !state.lessons[state.activeLessonId])) {
+                state.activeLessonId = keys[0];
+            }
             this.renderLessonsList();
             this.renderActiveLesson();
             this.populateLessonSelectDropdowns();
@@ -533,7 +545,7 @@
 
             inputUz.value = '';
             inputEn.value = '';
-            inputUz.focus();
+            inputEn.focus();
 
             this.renderActiveLesson();
             this.renderLessonsList(document.getElementById('lesson-search-input').value);
@@ -823,11 +835,21 @@
             emptyEl.classList.add('hidden');
             boardEl.classList.remove('hidden');
 
-            // Pick up to 8 random words
+            // Pick random words according to user selection
             let pool = [...lesson.sozlar];
+            const countVal = document.getElementById('test-count-select') ? document.getElementById('test-count-select').value : '10';
+            let targetCount = pool.length;
+            if (countVal !== 'all') {
+                const parsed = parseInt(countVal, 10);
+                if (!isNaN(parsed) && parsed > 0) {
+                    targetCount = parsed;
+                }
+            }
+            targetCount = Math.min(targetCount, pool.length);
+
             // Shuffle pool
             pool.sort(() => Math.random() - 0.5);
-            const selectedWords = pool.slice(0, Math.min(8, pool.length));
+            const selectedWords = pool.slice(0, targetCount);
 
             state.test.words = selectedWords;
             state.test.selectedUzTile = null;
