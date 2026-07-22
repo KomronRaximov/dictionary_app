@@ -1154,10 +1154,10 @@
                     return;
                 }
 
-                const uz = parts[0].trim();
-                const en = parts.slice(1).join(' ').trim(); // rejoin if extra separators inside
+                const en = parts[0].trim();
+                const uz = parts.slice(1).join(' ').trim(); // rejoin if extra separators inside
 
-                if (!uz || !en) {
+                if (!en || !uz) {
                     invalidCount++;
                     return;
                 }
