@@ -427,8 +427,8 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${displayIndex++}</td>
-                    <td class="word-uz-text">${escapeHtml(word.uz)}</td>
                     <td class="word-en-text">${escapeHtml(word.en)}</td>
+                    <td class="word-uz-text">${escapeHtml(word.uz)}</td>
                     <td>
                         <button class="btn-icon btn-speak" title="Talaffuz qilish">🔊</button>
                     </td>
